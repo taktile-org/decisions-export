@@ -1,0 +1,368 @@
+{
+    "title": "HistoricalDecision",
+    "required": [
+        "id",
+        "flow",
+        "is_error",
+        "is_sandbox",
+        "end_time",
+        "masked_fields",
+        "request",
+        "response"
+    ],
+    "type": "object",
+    "properties": {
+        "id": {
+            "title": "Id",
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "uuid"
+        },
+        "flow": {
+            "title": "HistoricalFlow",
+            "required": [
+                "id",
+                "slug",
+                "version_id",
+                "version_name"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "slug": {
+                    "title": "Slug",
+                    "type": "string"
+                },
+                "version_id": {
+                    "title": "Version Id",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "version_name": {
+                    "title": "Version Name",
+                    "type": "string"
+                }
+            }
+        },
+        "entity_id": {
+            "title": "Entity Id",
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "is_error": {
+            "title": "Is Error",
+            "type": "boolean"
+        },
+        "error": {
+            "title": "Error",
+            "type": [
+                "null",
+                "object"
+            ]
+        },
+        "is_sandbox": {
+            "title": "Is Sandbox",
+            "type": "boolean"
+        },
+        "duration_in_milliseconds": {
+            "title": "Duration In Milliseconds",
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "start_time": {
+            "title": "Start Time",
+            "type": [
+                "null",
+                "string"
+            ],
+            "format": "date-time"
+        },
+        "end_time": {
+            "title": "End Time",
+            "type": "string",
+            "format": "date-time"
+        },
+        "masked_fields": {
+            "title": "Masked Fields",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "request": {
+            "title": "HistoricalRequest",
+            "required": [
+                "data",
+                "metadata"
+            ],
+            "type": "object",
+            "properties": {
+                "data": {
+                    "title": "Data",
+                    "type": "object"
+                },
+                "metadata": {
+                    "title": "HistoricalMetadata",
+                    "type": "object",
+                    "properties": {
+                        "version": {
+                            "title": "Version",
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        },
+                        "entity_id": {
+                            "title": "Entity Id",
+                            "type": [
+                                "null",
+                                "string"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "response": {
+            "title": "Response",
+            "anyOf": [
+                {
+                    "title": "HistoricalResponseError",
+                    "required": [
+                        "detail"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "detail": {
+                            "title": "Detail",
+                            "type": "object"
+                        },
+                        "metadata": {
+                            "title": "HistoricalMetadata",
+                            "type": "object",
+                            "properties": {
+                                "version": {
+                                    "title": "Version",
+                                    "type": [
+                                        "null",
+                                        "string"
+                                    ]
+                                },
+                                "entity_id": {
+                                    "title": "Entity Id",
+                                    "type": [
+                                        "null",
+                                        "string"
+                                    ]
+                                },
+                                "timestamp": {
+                                    "title": "Entity Id",
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "decision_id": {
+                                    "title": "Entity Id",
+                                    "type": "string",
+                                    "format": "uuid"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "title": "HistoricalResponse",
+                    "required": [
+                        "data",
+                        "metadata"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "title": "Data",
+                            "type": "object"
+                        },
+                        "metadata": {
+                            "title": "HistoricalMetadata",
+                            "type": "object",
+                            "properties": {
+                                "version": {
+                                    "title": "Version",
+                                    "type": [
+                                        "null",
+                                        "string"
+                                    ]
+                                },
+                                "entity_id": {
+                                    "title": "Entity Id",
+                                    "type": [
+                                        "null",
+                                        "string"
+                                    ]
+                                },
+                                "timestamp": {
+                                    "title": "Entity Id",
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "decision_id": {
+                                    "title": "Entity Id",
+                                    "type": "string",
+                                    "format": "uuid"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "node_results": {
+            "title": "NodeResults",
+            "required": [
+                "time_ordered",
+                "nodes"
+            ],
+            "type": [
+                "null",
+                "object"
+            ],
+            "properties": {
+                "time_ordered": {
+                    "title": "Time Ordered",
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                },
+                "nodes": {
+                    "title": "Nodes",
+                    "type": "object",
+                    "additionalProperties": {
+                        "title": "Node",
+                        "required": [
+                            "id",
+                            "data",
+                            "tracing"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "title": "Id",
+                                "type": "string",
+                                "format": "uuid"
+                            },
+                            "title": {
+                                "title": "Title",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ]
+                            },
+                            "data": {
+                                "title": "Data",
+                                "type": "object"
+                            },
+                            "tracing": {
+                                "title": "NodeTracing",
+                                "required": [
+                                    "error"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "start_time": {
+                                        "title": "Start Time",
+                                        "type": [
+                                            "null",
+                                            "string"
+                                        ],
+                                        "format": "date-time"
+                                    },
+                                    "end_time": {
+                                        "title": "End Time",
+                                        "type": [
+                                            "null",
+                                            "string"
+                                        ],
+                                        "format": "date-time"
+                                    },
+                                    "error": {
+                                        "title": "Error",
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "external_resources": {
+            "title": "External Resources",
+            "type": [
+                "null",
+                "array"
+            ],
+            "items": {
+                "title": "ExternalResource",
+                "required": [
+                    "provider",
+                    "resource",
+                    "node_id",
+                    "response"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Id",
+                        "type": [
+                            "null",
+                            "string"
+                        ]
+                    },
+                    "provider": {
+                        "title": "Provider",
+                        "type": "string"
+                    },
+                    "resource": {
+                        "title": "Resource",
+                        "type": "string"
+                    },
+                    "node_id": {
+                        "title": "Node Id",
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "response": {
+                        "title": "Response",
+                        "type": "object"
+                    },
+                    "created_at": {
+                        "title": "Created At",
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "format": "date-time"
+                    },
+                    "from_cache": {
+                        "title": "From Cache",
+                        "type": [
+                            "null",
+                            "boolean"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

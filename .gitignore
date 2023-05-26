@@ -1,0 +1,5 @@
+.tap_venv
+.target_venv
+.pytest_cache
+.ruff_cache
+__pycache__
