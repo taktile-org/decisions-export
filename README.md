@@ -8,7 +8,7 @@ To export the data, you need to set up credentials for both the Tap and the Targ
 ### Tap settings
 Configure the Tap settings in the `tap-config.json` file. The settings include:
 
-- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Follow [our guide](https://help.taktile.com/en/articles/40930-integrate-a-taktile-decision-flow-into-your-backend).
+- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Follow [our guide](https://help.taktile.com/en/articles/40930-integrate-a-taktile-decision-flow-into-your-backend) to lear how to get base URL.
 - `api_key` - Taktile API Key. Follow [our guide](https://help.taktile.com/en/articles/28423-api-keys) to learn how to get an API Key.
 - `start_time` - The start time is used to filter the records retrieved from the Taktile API. It specifies the timestamp after which the decisions should be included in the response. Only decisions that happened after the `start_time` will be exported. Must be formatted according to the ISO 8610.
 - `end_time` - The end time is used for filtering the records retrieved from the Taktile API. It specifies the timestamp before which the decisions should be included in the response. Only decisions that happened before the `end_time` will be exported. Must be formatted according to the ISO 8610.
@@ -42,9 +42,9 @@ This command will fetch all the decisions that occurred in the previous full hou
 
 To automate the export process, schedule the script to run using cron. `10 * * * *` ([details](https://crontab.guru/#10_*_*_*_*)). We recommend running the script 10 minutes past the full hour to ensure that all internal archiving jobs are completed, and you get the complete history of decisions for the previous hour.
 
-YIf needed, you can provide custom start and end times to the script by specifying the TAP_START_TIME and TAP_END_TIME environment variables during execution:
+YIf needed, you can provide custom start and end times to the script by specifying the `TAP_START_TIME` and `TAP_END_TIME` environment variables during execution:
 ```bash
 TAP_START_TIME=2023-05-22T15:00:00 TAP_END_TIME=2023-05-22T17:00:00 ./run.sh
 ```
 
-Ensure that the values for TAP_START_TIME and TAP_END_TIME are formatted according to the ISO 8601 standard.
+Ensure that the values for `TAP_START_TIME` and `TAP_END_TIME` are formatted according to the ISO 8601 standard.
