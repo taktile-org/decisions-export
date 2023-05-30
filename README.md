@@ -22,7 +22,7 @@ Configure the Tap settings in the `tap-config.json` file. The settings include:
 - `include_node_results` - A boolean flag indicating whether intermediate execution results for each Decision Flow node should be included in the exported data. The default value is `false`
 - `include_external_resources` - A boolean flag indicating whether detailed external resources data should be included in the exported data. The default value is `false`
 
-Get the `base_url` and `api_key` from the Taktile platform and update the corresponding fields in the `tap-config.json` file. Also, decide whether you need to include node results and detailed external resources data. You don't need to update the `start_time` and `end_time` values at this point as they are configured just before executing the Tap.d_time` right now as those are configured right before the Tap execution.
+Get the `base_url` and `api_key` from the Taktile platform and update the corresponding fields in the `tap-config.json` file. Also, decide whether you need to include node results and detailed external resources data. You don't need to update the `start_time` and `end_time` values at this point as they are configured just before executing the Tap.
 
 ### Target settings
 Configure the Target settings in the `target-config.json` file. The settings include:
