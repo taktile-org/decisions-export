@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import json
 import os
 import sys
@@ -13,14 +14,16 @@ from singer import Schema, utils
 STREAM_NAME = "decisions"
 ENDPOINT_URL = "/history/api/v1/decisions"
 ORDER = "asc"
-
+LIMIT = 1000
 REQUIRED_CONFIG_KEYS = [
     "api_key",
     "base_url",
     "start_time",
+    "end_time",
     "include_node_results",
     "include_external_resources",
 ]
+
 LOGGER = singer.get_logger()
 
 Config = t.Dict[str, t.Any]
@@ -59,29 +62,51 @@ def _make_request(
 def fetch_records(
     base_url: str,
     api_key: str,
-    start_time: datetime | None = None,
+    start_time: datetime,
+    end_time: datetime,
     include_external_resources: bool = False,
     include_node_results: bool = False,
 ) -> t.Generator[t.Dict[str, t.Any], None, None]:
+    """Fetch a batch of records from Taktile Decision History API
+
+    Args:
+        base_url (str): Workspace base URL
+        api_key (str): API Key
+        start_time (datetime): Filter decision history records to only return those that
+            were recorded after the `start_time`.
+        end_time (datetime): Filter decision history records to only return those that
+            were recorded before the `end_time`.
+        include_external_resources (bool, optional): Indicate if additional data for external
+            resources that were fetched should be included in the response. Defaults to False.
+        include_node_results (bool, optional): Indicate if additional data for Nodes execution
+            should be included in the response. Defaults to False.
+
+    Returns:
+        t.Generator[t.Dict[str, t.Any], None, None]: Returns a generator with decisions history records
+
+    """
+
     params: t.Dict[str, t.Any] = {
-        "limit": 1000,
+        "limit": LIMIT,
         "include_external_resources": include_external_resources,
         "include_node_results": include_node_results,
-        "order": "asc",
+        "order": ORDER,
+        "start_time": start_time.isoformat(),
+        "end_time": end_time.isoformat(),
     }
-    if start_time:
-        params["start_time"] = start_time.isoformat()
 
     url = base_url + ENDPOINT_URL
 
     has_next = True
     next_cursor = None
+    # Fetch all records from `start_time` to `end_time`
     while has_next:
         if next_cursor:
             params["after"] = next_cursor
 
         response_data = _make_request(url, api_key, params)
         LOGGER.info("Decisions batch fetched")
+
         yield from response_data["decisions"]
 
         has_next = response_data["pagination"]["has_next"]
@@ -95,37 +120,29 @@ def sync(config: Config, state: State) -> None:
 
     schema = load_schema()
 
+    # Ensure times are in the correct format
+    start_time = datetime.fromisoformat(config["start_time"])
+    end_time = datetime.fromisoformat(config["end_time"])
+
     singer.write_schema(
         stream_name=STREAM_NAME,
         schema=schema.to_dict(),
         key_properties=["id"],
-        bookmark_properties=["end_time"],
     )
-
-    max_bookmark = None
-    bookmark_column = "end_time"
-
-    start_time_config = config.get("start_time")
-    start_time = (
-        datetime.fromisoformat(start_time_config) if start_time_config else None
-    )
+    number_of_records = 0
 
     for row in fetch_records(
         config["base_url"],
         config["api_key"],
         start_time,
+        end_time,
         include_external_resources=config["include_external_resources"],
         include_node_results=config["include_node_results"],
     ):
         singer.write_record(STREAM_NAME, row)
+        number_of_records += 1
 
-        max_bookmark = (
-            max(max_bookmark, row[bookmark_column])
-            if max_bookmark
-            else row[bookmark_column]
-        )
-
-    singer.write_state({STREAM_NAME: max_bookmark})
+    LOGGER.info(f"Loaded {number_of_records} records from the tap")
 
 
 @utils.handle_top_exception(LOGGER)

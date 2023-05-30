@@ -1,7 +1,0 @@
-{
-    "base_url": "<your workspace base url>",
-    "api_key": "<api token>",
-    "start_time": "<start time or null>",
-    "include_node_results": true,
-    "include_external_resources": true
-}

@@ -1,0 +1,8 @@
+{
+    "base_url": "<base_workspace_url>",
+    "api_key": "<api_key>",
+    "start_time": "<star_time>",
+    "end_time": "<end_time>",
+    "include_node_results": false,
+    "include_external_resources": false
+}
