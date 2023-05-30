@@ -1,6 +1,13 @@
-# Taktile Decision History -> Stitcher sync
+# Export Decision History
 
-This repository provides an example code for exporting the Taktile Decision History to the Stitcher. You can easily adapt the logic to export the data to the warehouse of your choice as the export is built on top of the [Singer Tap/Target]((https://github.com/singer-io/getting-started/tree/master)) framework. The provided Tap fetches data from the Taktile API, which can then be fed into any supported Target. For a list of available targets, refer to the [Singer.io](https://www.singer.io/) website.
+This repository provides an example code for exporting the Taktile Decision History to the system of your choice using [Singer](https://www.singer.io/#what-it-is) Taps and Targets.
+
+## Singer
+Singer is a open-source specification that facilitates data transfer between various [Taps](https://www.singer.io/#taps) and [Targets](https://www.singer.io/#targets). Tap is an application that extracts the data from the source system and writes each exported record to stdout in the specified format. Target is an application that reads records from stdout and loads them into the target system. Singer describes the format of the records that are being transferred and how Tap and Target operate.
+Learn more about Singer specification in their [documentation](https://github.com/singer-io/getting-started/tree/master)
+
+## Taktile Tap
+This repository provides a Tap that extracts Decision History Records from the Taktile API and exports them to the [Stitch Target](https://pypi.org/project/target-stitch/). You can easily adapt the logic to export the data to a different Target. You can use one of the [available targets](https://www.singer.io/#targets) or create your own.
 
 ## Setting up
 To export the data, you need to set up credentials for both the Tap and the Target:
@@ -8,12 +15,12 @@ To export the data, you need to set up credentials for both the Tap and the Targ
 ### Tap settings
 Configure the Tap settings in the `tap-config.json` file. The settings include:
 
-- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Follow [our guide](https://help.taktile.com/en/articles/40930-integrate-a-taktile-decision-flow-into-your-backend) to lear how to get base URL.
+- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Follow [our guide](https://help.taktile.com/en/articles/40930-integrate-a-taktile-decision-flow-into-your-backend) to lear how to get base URL. The value should be similar to `https://<workspace-name>.<organization-name>.decide.taktile.com`.
 - `api_key` - Taktile API Key. Follow [our guide](https://help.taktile.com/en/articles/28423-api-keys) to learn how to get an API Key.
-- `start_time` - The start time is used to filter the records retrieved from the Taktile API. It specifies the timestamp after which the decisions should be included in the response. Only decisions that happened after the `start_time` will be exported. Must be formatted according to the ISO 8610.
-- `end_time` - The end time is used for filtering the records retrieved from the Taktile API. It specifies the timestamp before which the decisions should be included in the response. Only decisions that happened before the `end_time` will be exported. Must be formatted according to the ISO 8610.
-- `include_node_results` - A boolean flag indicating whether intermediate execution results for each Decision Flow node should be included in the exported data. If set to `false`, the exported data will only contain the input and final output data.
-- `include_external_resources` - A boolean flag indicating whether detailed external resources data should be included in the exported data. If set to `false`, the exported data will only contain external resources if they are part of the flow output data.
+- `start_time` - The start time is used to filter the records retrieved from the Taktile API. It specifies the timestamp after which the decisions should be included in the response. Only decisions that happened after the `start_time` will be exported. Must be formatted according to the [ISO 8610](https://www.iso.org/iso-8601-date-and-time-format.html). The default value is calculated dynamically as the start of the **previous** full hour.
+- `end_time` - The end time is used for filtering the records retrieved from the Taktile API. It specifies the timestamp before which the decisions should be included in the response. Only decisions that happened before the `end_time` will be exported. Must be formatted according to the [ISO 8610](https://www.iso.org/iso-8601-date-and-time-format.html). The default value is calculated dynamically as the start of the **current** full hour.
+- `include_node_results` - A boolean flag indicating whether intermediate execution results for each Decision Flow node should be included in the exported data. The default value is `false`
+- `include_external_resources` - A boolean flag indicating whether detailed external resources data should be included in the exported data. The default value is `false`
 
 Get the `base_url` and `api_key` from the Taktile platform and update the corresponding fields in the `tap-config.json` file. Also, decide whether you need to include node results and detailed external resources data. You don't need to update the `start_time` and `end_time` values at this point as they are configured just before executing the Tap.d_time` right now as those are configured right before the Tap execution.
 
@@ -33,7 +40,7 @@ Both the Tap and Target require their own execution environment. You will notice
 
 ## Execution
 
-To execute the sync manuall, run the following command using bash:
+To execute the sync manually, run the following command using bash:
 ```bash
 ./run.sh
 ```
@@ -42,7 +49,7 @@ This command will fetch all the decisions that occurred in the previous full hou
 
 To automate the export process, schedule the script to run using cron. `10 * * * *` ([details](https://crontab.guru/#10_*_*_*_*)). We recommend running the script 10 minutes past the full hour to ensure that all internal archiving jobs are completed, and you get the complete history of decisions for the previous hour.
 
-YIf needed, you can provide custom start and end times to the script by specifying the `TAP_START_TIME` and `TAP_END_TIME` environment variables during execution:
+If needed, you can provide custom start and end times to the script by specifying the `TAP_START_TIME` and `TAP_END_TIME` environment variables during execution:
 ```bash
 TAP_START_TIME=2023-05-22T15:00:00 TAP_END_TIME=2023-05-22T17:00:00 ./run.sh
 ```
