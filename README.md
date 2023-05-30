@@ -1,7 +1,5 @@
 # Taktile Decision History -> Stitcher sync
 
-This repo provides an example of how to export the Taktile Decision History to the Stitcher. However you can easily adapt the logic to export to the warehouse of your choise since the export is built on top of the [Singer Tap/Target](https://github.com/singer-io/getting-started/tree/master). This repository provides a Tap that fetches the data from Taktile API. This data can be fed into any Target that is supported. Check out the [Singer.io](https://www.singer.io/) to get the list of available targets.
-
 This repository provides an example code for exporting the Taktile Decision History to the Stitcher. You can easily adapt the logic to export the data to the warehouse of your choice as the export is built on top of the [Singer Tap/Target]((https://github.com/singer-io/getting-started/tree/master)) framework. The provided Tap fetches data from the Taktile API, which can then be fed into any supported Target. For a list of available targets, refer to the [Singer.io](https://www.singer.io/) website.
 
 ## Setting up
@@ -12,8 +10,8 @@ Configure the Tap settings in the `tap-config.json` file. The settings include:
 
 - `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Refer to the API documentation for the Decision Flow to get the base URL.
 - `api_key` - Taktile API Key. Follow [our guide](https://help.taktile.com/en/articles/28423-api-keys) to learn how to get an API Key.
-- `start_time` - TODO: fix
-- `end_time` - TODO: fix
+- `start_time` - The start time is used to filter the records retrieved from the Taktile API. It specifies the timestamp after which the decisions should be included in the response. Only decisions that happened after the `start_time` will be exported. Must be formatted according to the ISO 8610.
+- `end_time` - The end time is used for filtering the records retrieved from the Taktile API. It specifies the timestamp before which the decisions should be included in the response. Only decisions that happened before the `end_time` will be exported. Must be formatted according to the ISO 8610.
 - `include_node_results` - A boolean flag indicating whether intermediate execution results for each Decision Flow node should be included in the exported data. If set to `false`, the exported data will only contain the input and final output data.
 - `include_external_resources` - A boolean flag indicating whether detailed external resources data should be included in the exported data. If set to `false`, the exported data will only contain external resources if they are part of the flow output data.
 
@@ -22,8 +20,8 @@ Get the `base_url` and `api_key` from the Taktile platform and update the corres
 ### Target settings
 Configure the Target settings in the `target-config.json` file. The settings include:
 
-- `client_id` - Stitch client ID. Consult the Stitch documentation to find where to obtain this value.
-- `token` - Stitch API token. Consult the Stitch documentation for instructions on getting this value.
+- `client_id` - Stitch client ID. Consult the [Stitch documentation](https://www.stitchdata.com/docs/developers/import-api/api) to find where to obtain this value.
+- `token` - Stitch API token. Consult the [Stitch documentation](https://www.stitchdata.com/docs/developers/import-api/api) for instructions on getting this value.
 - `big_batch_url` and `small_batch_url` - The Stitch API URLs to which the exported data will be uploaded. Refer to the [Stitch API docs]((https://www.stitchdata.com/docs/developers/import-api/api#base-urls)) to determine which URL to use.
 - `batch_size_preferences` - An internal Stitch Target setting; leave it unchanged.
 - `disable_collection` - A boolean flag indicating whether Stitch can collect anonymous usage statistics.
