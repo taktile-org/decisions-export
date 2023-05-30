@@ -8,7 +8,7 @@ To export the data, you need to set up credentials for both the Tap and the Targ
 ### Tap settings
 Configure the Tap settings in the `tap-config.json` file. The settings include:
 
-- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Refer to the API documentation for the Decision Flow to get the base URL.
+- `base_url` - The base URL of the Taktile Workspace from which you want to extract decisions. Follow [our guide](https://help.taktile.com/en/articles/40930-integrate-a-taktile-decision-flow-into-your-backend).
 - `api_key` - Taktile API Key. Follow [our guide](https://help.taktile.com/en/articles/28423-api-keys) to learn how to get an API Key.
 - `start_time` - The start time is used to filter the records retrieved from the Taktile API. It specifies the timestamp after which the decisions should be included in the response. Only decisions that happened after the `start_time` will be exported. Must be formatted according to the ISO 8610.
 - `end_time` - The end time is used for filtering the records retrieved from the Taktile API. It specifies the timestamp before which the decisions should be included in the response. Only decisions that happened before the `end_time` will be exported. Must be formatted according to the ISO 8610.
