@@ -3,3 +3,14 @@
 .pytest_cache
 .ruff_cache
 __pycache__
+.idea/**
+.vscode/**
+**/__pycache__/
+dist
+**/package
+*.zip
+*.whl
+env/
+**/.idea/**
+**/.dmypy.json
+**/*.pyi

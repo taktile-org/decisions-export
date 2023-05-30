@@ -76,13 +76,15 @@ def fetch_records(
             were recorded after the `start_time`.
         end_time (datetime): Filter decision history records to only return those that
             were recorded before the `end_time`.
-        include_external_resources (bool, optional): Indicate if additional data for external
-            resources that were fetched should be included in the response. Defaults to False.
-        include_node_results (bool, optional): Indicate if additional data for Nodes execution
-            should be included in the response. Defaults to False.
+        include_external_resources (bool, optional): Indicate if additional data for
+            external resources that were fetched should be included in the response.
+            Defaults to False.
+        include_node_results (bool, optional): Indicate if additional data for Nodes
+            execution should be included in the response. Defaults to False.
 
     Returns:
-        t.Generator[t.Dict[str, t.Any], None, None]: Returns a generator with decisions history records
+        t.Generator[t.Dict[str, t.Any], None, None]: Returns a generator with decisions
+            history records
 
     """
 
