@@ -125,6 +125,9 @@ def sync(config: Config, state: State) -> None:
     # Ensure times are in the correct format
     start_time = datetime.fromisoformat(config["start_time"])
     end_time = datetime.fromisoformat(config["end_time"])
+    LOGGER.info(
+        f"Fetching data from {start_time.isoformat()} to {end_time.isoformat()}"
+    )
 
     singer.write_schema(
         stream_name=STREAM_NAME,
