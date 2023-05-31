@@ -5,7 +5,7 @@ import json
 import os
 from datetime import datetime, timedelta, timezone
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 parser = argparse.ArgumentParser(description="Set up tap time filters")
 parser.add_argument("--start-time", dest="start_time", type=str, default="")
